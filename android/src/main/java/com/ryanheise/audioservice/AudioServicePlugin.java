@@ -337,6 +337,11 @@ public class AudioServicePlugin {
 				mediaController.getTransportControls().seekTo(pos);
 				result.success(true);
 				break;
+			case "setVolume":
+//				Double volume = (Double) call.arguments;
+//				mediaController.setVolumeTo(volume.intValue(), volume.intValue());
+				result.success(true);
+				break;
 			case "skipToNext":
 				mediaController.getTransportControls().skipToNext();
 				result.success(true);
@@ -544,6 +549,10 @@ public class AudioServicePlugin {
 		@Override
 		public void onSeekTo(long pos) {
 			invokeMethod("onSeekTo", pos);
+		}
+		@Override
+		public void onSetVolume(double volume) {
+			invokeMethod("onSetVolume", volume);
 		}
 		@Override
 		public void onSetRating(RatingCompat rating) {

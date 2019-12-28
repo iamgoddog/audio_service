@@ -625,6 +625,11 @@ class AudioService {
     await _channel.invokeMethod('seekTo', pos);
   }
 
+  /// Passes through to `onSetVolume` in the background task.
+  static Future<void> setVolume(double volume) async {
+    await _channel.invokeMethod('setVolume', volume);
+  }
+
   /// Passes through to `onSkipToNext` in the background task.
   static Future<void> skipToNext() async {
     await _channel.invokeMethod('skipToNext');
@@ -797,6 +802,11 @@ class AudioServiceBackground {
           final List args = call.arguments;
           int pos = args[0];
           task.onSeekTo(pos);
+          break;
+        case 'onSetVolume':
+          final List args = call.arguments;
+          double volume = args[0];
+          task.onSetVolume(volume);
           break;
         case 'onSetRating':
           task.onSetRating(
@@ -1009,6 +1019,10 @@ abstract class BackgroundAudioTask {
   /// Called when the client has requested to seek to a position, such as via a
   /// call to [AudioService.seekTo].
   void onSeekTo(int position) {}
+
+  /// Called when the client has requested to set volume, such as via a
+  /// call to [AudioService.setVolume].
+  void onSetVolume(double volume) {}
 
   /// Called when the client has requested to rate the current media item, such as
   /// via a call to [AudioService.setRating].

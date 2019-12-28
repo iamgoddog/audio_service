@@ -220,6 +220,9 @@ static MPMediaItemArtwork* artwork = nil;
   } else if ([@"setRating" isEqualToString:call.method]) {
     [backgroundChannel invokeMethod:@"onSetRating" arguments:@[call.arguments, [NSNull null]]];
     result(@YES);
+  } else if ([@"setVolume" isEqualToString:call.method]) {
+     [backgroundChannel invokeMethod:@"onSetVolume" arguments:@[call.arguments, [NSNull null]]];
+    result(@YES);
   } else if ([@"setState" isEqualToString:call.method]) {
     long long msSinceEpoch;
     if (call.arguments[5] != [NSNull null]) {
@@ -323,6 +326,12 @@ static MPMediaItemArtwork* artwork = nil;
 - (MPRemoteCommandHandlerStatus) nextTrack: (MPRemoteCommandEvent *) event {
   NSLog(@"nextTrack");
   [backgroundChannel invokeMethod:@"onSkipToNext" arguments:nil];
+  return MPRemoteCommandHandlerStatusSuccess;
+}
+
+- (MPRemoteCommandHandlerStatus) setVolume: (MPRemoteCommandEvent *) event {
+  NSLog(@"setVolume");
+  [backgroundChannel invokeMethod:@"onSetVolume" arguments:nil];
   return MPRemoteCommandHandlerStatusSuccess;
 }
 
