@@ -172,7 +172,7 @@ public class AudioService extends MediaBrowserServiceCompat implements AudioMana
 		}
 	}
 
-	void setState(List<NotificationCompat.Action> actions, int actionBits, int[] compactActionIndices, int playbackState, long position, float speed, long updateTime) {
+	void setState(List<NotificationCompat.Action> actions, int actionBits, int[] compactActionIndices, int playbackState, long position, float speed, long updateTime, long duration) {
 		this.actions = actions;
 		this.compactActionIndices = compactActionIndices;
 

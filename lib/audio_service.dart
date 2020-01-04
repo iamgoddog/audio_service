@@ -62,6 +62,8 @@ class PlaybackState {
   /// The playback position in milliseconds at the last update time
   final int position;
 
+  final int duration;
+
   /// The current playback speed where 1.0 means normal speed
   final double speed;
 
@@ -74,11 +76,13 @@ class PlaybackState {
     this.position,
     this.speed,
     this.updateTime,
+    this.duration,
   });
 
   /// The current playback position in milliseconds
   int get currentPosition {
     if (basicState == BasicPlaybackState.playing) {
+      //print('*** currentPosition updateTime: $updateTime');
       return position + DateTime.now().millisecondsSinceEpoch - updateTime;
     } else {
       return position;
@@ -122,8 +126,7 @@ class Rating {
   const Rating._internal(this._type, this._value);
 
   /// Create a new heart rating.
-  const Rating.newHeartRating(bool hasHeart)
-      : this._internal(RatingStyle.heart, hasHeart);
+  const Rating.newHeartRating(bool hasHeart) : this._internal(RatingStyle.heart, hasHeart);
 
   /// Create a new percentage rating.
   factory Rating.newPercentageRating(double percent) {
@@ -138,8 +141,7 @@ class Rating {
         starRatingStyle != RatingStyle.range5stars) {
       throw ArgumentError();
     }
-    if (starRating > starRatingStyle.index || starRating < 0)
-      throw ArgumentError();
+    if (starRating > starRatingStyle.index || starRating < 0) throw ArgumentError();
     return Rating._internal(starRatingStyle, starRating);
   }
 
@@ -148,8 +150,7 @@ class Rating {
       : this._internal(RatingStyle.thumbUpDown, isThumbsUp);
 
   /// Create a new unrated rating.
-  const Rating.newUnratedRating(RatingStyle ratingStyle)
-      : this._internal(ratingStyle, null);
+  const Rating.newUnratedRating(RatingStyle ratingStyle) : this._internal(ratingStyle, null);
 
   /// Return the rating style.
   RatingStyle getRatingStyle() => _type;
@@ -321,8 +322,7 @@ class MediaControl {
   });
 }
 
-const MethodChannel _channel =
-    const MethodChannel('ryanheise.com/audioService');
+const MethodChannel _channel = const MethodChannel('ryanheise.com/audioService');
 
 Map _mediaItem2raw(MediaItem mediaItem) => {
       'id': mediaItem.id,
@@ -380,14 +380,12 @@ class AudioService {
   static final _playbackStateSubject = BehaviorSubject<PlaybackState>();
 
   /// A stream that broadcasts the playback state.
-  static Stream<PlaybackState> get playbackStateStream =>
-      _playbackStateSubject.stream;
+  static Stream<PlaybackState> get playbackStateStream => _playbackStateSubject.stream;
 
   static final _currentMediaItemSubject = BehaviorSubject<MediaItem>();
 
   /// A stream that broadcasts the current [MediaItem].
-  static Stream<MediaItem> get currentMediaItemStream =>
-      _currentMediaItemSubject.stream;
+  static Stream<MediaItem> get currentMediaItemStream => _currentMediaItemSubject.stream;
 
   static final _queueSubject = BehaviorSubject<List<MediaItem>>();
 
@@ -435,15 +433,19 @@ class AudioService {
             position: args[2],
             speed: args[3],
             updateTime: args[4],
+            duration: args.length > 5 ? args[5] : (_playbackState.duration ?? 0),
           );
+          //print('audio_service onPlaybackStateChanged duration: ${_playbackState.duration}');
           _playbackStateSubject.add(_playbackState);
           break;
         case 'onMediaChanged':
-          _currentMediaItem = call.arguments[0] != null ? _raw2mediaItem(call.arguments[0]) : null;
+          _currentMediaItem =
+              call.arguments[0] != null ? _raw2mediaItem(call.arguments[0]) : null;
           _currentMediaItemSubject.add(_currentMediaItem);
           break;
         case 'onQueueChanged':
-          final List<Map> args = call.arguments[0] != null ? List<Map>.from(call.arguments[0]) : null;
+          final List<Map> args =
+              call.arguments[0] != null ? List<Map>.from(call.arguments[0]) : null;
           _queue = args?.map(_raw2mediaItem)?.toList();
           _queueSubject.add(_queue);
           break;
@@ -535,12 +537,10 @@ class AudioService {
     return await _channel.invokeMethod('start', {
       'callbackHandle': callbackHandle,
       'androidNotificationChannelName': androidNotificationChannelName,
-      'androidNotificationChannelDescription':
-          androidNotificationChannelDescription,
+      'androidNotificationChannelDescription': androidNotificationChannelDescription,
       'notificationColor': notificationColor,
       'androidNotificationIcon': androidNotificationIcon,
-      'androidNotificationClickStartsActivity':
-          androidNotificationClickStartsActivity,
+      'androidNotificationClickStartsActivity': androidNotificationClickStartsActivity,
       'androidNotificationOngoing': androidNotificationOngoing,
       'resumeOnClick': resumeOnClick,
       'shouldPreloadArtwork': shouldPreloadArtwork,
@@ -551,8 +551,7 @@ class AudioService {
 
   /// Sets the parent of the children that [browseMediaChildrenStream] broadcasts.
   /// If unspecified, the root parent will be used.
-  static Future<void> setBrowseMediaParent(
-      [String parentMediaId = MEDIA_ROOT_ID]) async {
+  static Future<void> setBrowseMediaParent([String parentMediaId = MEDIA_ROOT_ID]) async {
     await _channel.invokeMethod('setBrowseMediaParent', parentMediaId);
   }
 
@@ -563,8 +562,7 @@ class AudioService {
 
   /// Passes through to `onAddQueueItemAt` in the background task.
   static Future<void> addQueueItemAt(MediaItem mediaItem, int index) async {
-    await _channel
-        .invokeMethod('addQueueItemAt', [_mediaItem2raw(mediaItem), index]);
+    await _channel.invokeMethod('addQueueItemAt', [_mediaItem2raw(mediaItem), index]);
   }
 
   /// Passes through to `onRemoveQueueItem` in the background task.
@@ -652,8 +650,7 @@ class AudioService {
 
   /// Passes through to `onSetRating` in the background task.
   /// The extras map must *only* contain primitive types!
-  static Future<void> setRating(Rating rating,
-      [Map<String, dynamic> extras]) async {
+  static Future<void> setRating(Rating rating, [Map<String, dynamic> extras]) async {
     await _channel.invokeMethod('setRating', {
       "rating": rating._toRaw(),
       "extras": extras,
@@ -701,8 +698,7 @@ class AudioServiceBackground {
   /// of the task, as well as any requests by the client to play, pause and
   /// otherwise control audio playback.
   static Future<void> run(BackgroundAudioTask taskBuilder()) async {
-    _backgroundChannel =
-        const MethodChannel('ryanheise.com/audioServiceBackground');
+    _backgroundChannel = const MethodChannel('ryanheise.com/audioServiceBackground');
     WidgetsFlutterBinding.ensureInitialized();
     final task = taskBuilder();
     _backgroundChannel.setMethodCallHandler((MethodCall call) async {
@@ -809,13 +805,11 @@ class AudioServiceBackground {
           task.onSetVolume(volume);
           break;
         case 'onSetRating':
-          task.onSetRating(
-              Rating._fromRaw(call.arguments[0]), call.arguments[1]);
+          task.onSetRating(Rating._fromRaw(call.arguments[0]), call.arguments[1]);
           break;
         default:
           if (call.method.startsWith(_CUSTOM_PREFIX)) {
-            task.onCustomAction(
-                call.method.substring(_CUSTOM_PREFIX.length), call.arguments);
+            task.onCustomAction(call.method.substring(_CUSTOM_PREFIX.length), call.arguments);
           }
           break;
       }
@@ -855,14 +849,17 @@ class AudioServiceBackground {
     List<MediaAction> systemActions = const [],
     @required BasicPlaybackState basicState,
     int position = 0,
+    int duration = 0,
     double speed = 1.0,
     int updateTime,
     List<int> androidCompactActions,
   }) async {
+    //print('AudioService.setState: duration=$duration');
     _state = PlaybackState(
       basicState: basicState,
       actions: controls.map((control) => control.action).toSet(),
       position: position,
+      duration: duration,
       speed: speed,
       updateTime: updateTime,
     );
@@ -881,20 +878,19 @@ class AudioServiceBackground {
       position,
       speed,
       updateTime,
-      androidCompactActions
+      androidCompactActions,
+      duration,
     ]);
   }
 
   /// Sets the current queue and notifies all clients.
   static Future<void> setQueue(List<MediaItem> queue) async {
-    await _backgroundChannel.invokeMethod(
-        'setQueue', queue.map(_mediaItem2raw).toList());
+    await _backgroundChannel.invokeMethod('setQueue', queue.map(_mediaItem2raw).toList());
   }
 
   /// Sets the currently playing media item and notifies all clients.
   static Future<void> setMediaItem(MediaItem mediaItem) async {
-    await _backgroundChannel.invokeMethod(
-        'setMediaItem', _mediaItem2raw(mediaItem));
+    await _backgroundChannel.invokeMethod('setMediaItem', _mediaItem2raw(mediaItem));
   }
 
   /// Notify clients that the child media items of [parentMediaId] have
@@ -903,8 +899,7 @@ class AudioServiceBackground {
   /// If [parentMediaId] is unspecified, the root parent will be used.
   static Future<void> notifyChildrenChanged(
       [String parentMediaId = AudioService.MEDIA_ROOT_ID]) async {
-    await _backgroundChannel.invokeMethod(
-        'notifyChildrenChanged', parentMediaId);
+    await _backgroundChannel.invokeMethod('notifyChildrenChanged', parentMediaId);
   }
 
   /// In Android, forces media button events to be routed to your active media

@@ -24,6 +24,7 @@ static NSNumber *state = nil;
 static NSNumber *position = nil;
 static NSNumber *updateTime = nil;
 static NSNumber *speed = nil;
+static NSNumber *duration = nil;
 static MPMediaItemArtwork* artwork = nil;
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
@@ -66,6 +67,7 @@ static MPMediaItemArtwork* artwork = nil;
       position = @(0);
       updateTime = [NSNumber numberWithLongLong: msSinceEpoch];
       speed = [NSNumber numberWithDouble: 1.0];
+      duration = [NSNumber numberWithLongLong: 0];
     }
     [channel invokeMethod:@"onPlaybackStateChanged" arguments:@[
       // state
@@ -77,7 +79,8 @@ static MPMediaItemArtwork* artwork = nil;
       // playback speed
       speed,
       // update time since epoch
-      updateTime
+      updateTime,
+      duration
     ]];
     [channel invokeMethod:@"onMediaChanged" arguments:@[mediaItem ? mediaItem : [NSNull null]]];
     [channel invokeMethod:@"onQueueChanged" arguments:@[queue ? queue : [NSNull null]]];
@@ -234,6 +237,7 @@ static MPMediaItemArtwork* artwork = nil;
     position = call.arguments[3];
     updateTime = [NSNumber numberWithLongLong: msSinceEpoch];
     speed = call.arguments[4];
+    duration = [NSNumber numberWithLongLong: [call.arguments[7] longLongValue]];
     [channel invokeMethod:@"onPlaybackStateChanged" arguments:@[
       // state
       state,
@@ -244,7 +248,8 @@ static MPMediaItemArtwork* artwork = nil;
       // playback speed
       speed,
       // update time since epoch
-      updateTime
+      updateTime,
+      duration
     ]];
     [self updateNowPlayingInfo];
     result(@(YES));
@@ -298,13 +303,15 @@ static MPMediaItemArtwork* artwork = nil;
   if (mediaItem) {
     nowPlayingInfo[MPMediaItemPropertyTitle] = mediaItem[@"title"];
     nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = mediaItem[@"album"];
-    if (mediaItem[@"duration"] != [NSNull null]) {
-      nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = [NSNumber numberWithLongLong: ([mediaItem[@"duration"] longLongValue] / 1000)];
+    if (duration > 0) {
+      nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = [NSNumber numberWithLongLong: ([duration longLongValue] / 1000)];
     }
     if (artwork) {
       nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork;
     }
-    nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = [NSNumber numberWithInt:([position intValue] / 1000)];
+    if(position){
+      nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = [NSNumber numberWithInt:([position intValue] / 1000)];
+    }
   }
   int stateCode = state ? [state intValue] : 0;
   nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = [NSNumber numberWithDouble: stateCode >= 3 ? 1.0 : 0.0];
