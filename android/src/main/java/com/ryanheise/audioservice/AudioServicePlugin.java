@@ -61,9 +61,11 @@ public class AudioServicePlugin {
     private static volatile Result startResult;
     private static String subscribedParentMediaId;
     private static long bootTime;
+    private static Long duration;
 
     static {
         bootTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+        duration = 0L;
     }
 
     public static void setPluginRegistrantCallback(PluginRegistrantCallback pluginRegistrantCallback) {
@@ -78,6 +80,10 @@ public class AudioServicePlugin {
             clientHandler = new ClientHandler(registrar);
         else
             backgroundHandler.init(registrar);
+    }
+
+    private static void setDuration(Long newDuration){
+        duration = newDuration;
     }
 
     private static void sendConnectResult(boolean result) {
@@ -96,7 +102,6 @@ public class AudioServicePlugin {
         private boolean playPending;
         public MediaBrowserCompat mediaBrowser;
         public MediaControllerCompat mediaController;
-        private Long _duration = 0L;
         public MediaControllerCompat.Callback controllerCallback = new MediaControllerCompat.Callback() {
             @Override
             public void onMetadataChanged(MediaMetadataCompat metadata) {
@@ -107,9 +112,9 @@ public class AudioServicePlugin {
             public void onPlaybackStateChanged(PlaybackStateCompat state) {
                 // On the native side, we represent the update time relative to the boot time.
                 // On the flutter side, we represent the update time relative to the epoch.
-//                long updateTimeSinceBoot = state.getLastPositionUpdateTime();
-//                long updateTimeSinceEpoch = bootTime + updateTimeSinceBoot;
-//                invokeMethod("onPlaybackStateChanged", state.getState(), state.getActions(), state.getPosition(), state.getPlaybackSpeed(), updateTimeSinceEpoch, _duration);
+                long updateTimeSinceBoot = state.getLastPositionUpdateTime();
+                long updateTimeSinceEpoch = bootTime + updateTimeSinceBoot;
+                invokeMethod("onPlaybackStateChanged", state.getState(), state.getActions(), state.getPosition(), state.getPlaybackSpeed(), updateTimeSinceEpoch, duration);
             }
 
             @Override
@@ -181,11 +186,11 @@ public class AudioServicePlugin {
         public void onMethodCall(MethodCall call, final Result result) {
             Context context = registrar.activeContext();
             FlutterApplication application = (FlutterApplication) context.getApplicationContext();
-            switch (call.method) {
+            switch (call.method) {/*
                 case "setDuration":
                     Log.i("lotta", "onMethodCall: setDuration: " + call.arguments);
                     _duration = (Long) call.arguments;
-                    break;
+                    break;*/
                 case "isRunning":
                     result.success(AudioService.isRunning());
                     break;
@@ -314,7 +319,6 @@ public class AudioServicePlugin {
                 //prepareFromUri
                 case "play":
                     mediaController.getTransportControls().play();
-                    //_duration = call.arguments;
                     result.success(true);
                     break;
                 case "playFromMediaId": {
@@ -602,7 +606,6 @@ public class AudioServicePlugin {
             invokeMethod("onSetRating", rating2raw(rating), extras.getSerializable("extrasMap"));
         }
 
-        private Long _duration = 0L;
 
         @Override
         public void onMethodCall(MethodCall call, Result result) {
@@ -666,9 +669,10 @@ public class AudioServicePlugin {
                     }
                     AudioService.instance.setState(actions, actionBits, compactActionIndices, playbackState, position, speed, updateTimeSinceBoot, duration);
 
+                    setDuration(duration);
                     //Log.i("lotta", "clientHandler: "+clientHandler);
-                    if (clientHandler != null)
-                        clientHandler.invokeMethod("onPlaybackStateChanged", playbackState, actionBits, position, speed, updateTimeSinceEpoch, duration);
+//                    if (clientHandler != null)
+//                        clientHandler.invokeMethod("onPlaybackStateChanged", playbackState, actionBits, position, speed, updateTimeSinceEpoch, duration);
                     /*if (clientHandler != null && !duration.equals(_duration)) {
                         Log.i("lotta", "call setDuration: " + duration);
                         _duration = duration;
