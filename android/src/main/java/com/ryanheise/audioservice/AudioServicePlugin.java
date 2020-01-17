@@ -667,9 +667,9 @@ public class AudioServicePlugin {
                         for (int i = 0; i < compactActionIndices.length; i++)
                             compactActionIndices[i] = (Integer) compactActionIndexList.get(i);
                     }
+                    setDuration(duration);
                     AudioService.instance.setState(actions, actionBits, compactActionIndices, playbackState, position, speed, updateTimeSinceBoot, duration);
 
-                    setDuration(duration);
                     //Log.i("lotta", "clientHandler: "+clientHandler);
 //                    if (clientHandler != null)
 //                        clientHandler.invokeMethod("onPlaybackStateChanged", playbackState, actionBits, position, speed, updateTimeSinceEpoch, duration);
