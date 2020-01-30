@@ -751,7 +751,6 @@ public class AudioService extends MediaBrowserServiceCompat implements AudioMana
 		void onRewind();
 		void onStop();
 		void onSeekTo(long pos);
-		void onSetVolume(double volume);
 		void onSetRating(RatingCompat rating);
 		void onSetRating(RatingCompat rating, Bundle extras);
 		//void onSetRepeatMode(@PlaybackStateCompat.RepeatMode int repeatMode)
