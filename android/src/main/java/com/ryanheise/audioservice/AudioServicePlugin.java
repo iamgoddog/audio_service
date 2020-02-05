@@ -258,10 +258,11 @@ public class AudioServicePlugin implements FlutterPlugin, ActivityAware {
                     boolean shouldPreloadArtwork = (Boolean) arguments.get("shouldPreloadArtwork");
                     final boolean enableQueue = (Boolean) arguments.get("enableQueue");
                     final boolean androidStopForegroundOnPause = (Boolean) arguments.get("androidStopForegroundOnPause");
+				    final boolean androidStopOnRemoveTask = (Boolean)arguments.get("androidStopOnRemoveTask");
 
-				final String appBundlePath = FlutterMain.findAppBundlePath(context.getApplicationContext());
+				    final String appBundlePath = FlutterMain.findAppBundlePath(context.getApplicationContext());
                     backgroundHandler = new BackgroundHandler(callbackHandle, appBundlePath, enableQueue);
-                    AudioService.init(activity, resumeOnClick, androidNotificationChannelName, androidNotificationChannelDescription, notificationColor, androidNotificationIcon, androidNotificationClickStartsActivity, androidNotificationOngoing, shouldPreloadArtwork, androidStopForegroundOnPause, backgroundHandler);
+				    AudioService.init(activity, resumeOnClick, androidNotificationChannelName, androidNotificationChannelDescription, notificationColor, androidNotificationIcon, androidNotificationClickStartsActivity, androidNotificationOngoing, shouldPreloadArtwork, androidStopForegroundOnPause, androidStopOnRemoveTask, backgroundHandler);
 
                     synchronized (connectionCallback) {
                         if (mediaController != null)
@@ -593,7 +594,7 @@ public class AudioServicePlugin implements FlutterPlugin, ActivityAware {
 
         @Override
         public void onAddQueueItemAt(MediaMetadataCompat metadata, int index) {
-            invokeMethod("onAddQueueItem", mediaMetadata2raw(metadata), index);
+            invokeMethod("onAddQueueItemAt", mediaMetadata2raw(metadata), index);
         }
 
         @Override
@@ -710,8 +711,8 @@ public class AudioServicePlugin implements FlutterPlugin, ActivityAware {
                     if (silenceAudioTrack != null)
                         silenceAudioTrack.release();
                     if (clientHandler != null) clientHandler.invokeMethod("onStopped");
-				backgroundFlutterEngine.destroy();
-				backgroundFlutterEngine = null;
+                    backgroundFlutterEngine.destroy();
+                    backgroundFlutterEngine = null;
                     backgroundHandler = null;
                     result.success(true);
                     break;
