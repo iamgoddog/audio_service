@@ -56,7 +56,7 @@ static MPMediaItemArtwork* artwork = nil;
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     @try {
-        
+
   // TODO:
   // - Restructure this so that we have a separate method call delegate
   //   for the client instance and the background instance so that methods
@@ -351,7 +351,7 @@ static MPMediaItemArtwork* artwork = nil;
 }
 
 - (MPRemoteCommandHandlerStatus) changePlaybackPosition: (MPChangePlaybackPositionCommandEvent *) event {
-  [backgroundChannel invokeMethod:@"onSeekTo" arguments: @[@(event.positionTime)]];
+  [backgroundChannel invokeMethod:@"onSeekTo" arguments: @[@((long long) (event.positionTime * 1000))]];
   return MPRemoteCommandHandlerStatusSuccess;
 }
 

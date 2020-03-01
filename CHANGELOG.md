@@ -1,3 +1,11 @@
+## 0.6.2
+
+* Bug fixes.
+
+## 0.6.1
+
+* Option to stop service on closing task (Android).
+
 ## 0.6.0
 
 * Migrated to V2 embedding API (Flutter 1.12).
