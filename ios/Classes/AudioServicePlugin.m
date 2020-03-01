@@ -55,6 +55,8 @@ static MPMediaItemArtwork* artwork = nil;
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+    @try {
+        
   // TODO:
   // - Restructure this so that we have a separate method call delegate
   //   for the client instance and the background instance so that methods
@@ -283,18 +285,22 @@ static MPMediaItemArtwork* artwork = nil;
   } else {
     // TODO: Check if this implementation is correct.
     // Can I just pass on the result as the last argument?
-    [backgroundChannel invokeMethod:call.method arguments:call.arguments result: result];
+
+      if(backgroundChannel){
+          [backgroundChannel invokeMethod:call.method arguments:call.arguments result: result];
+      }
+  }
+  } @catch (NSException *exception) {
+      //NSLog([NSString stringWithFormat:@"Error reason: %@", [exception reason]]);
   }
 }
 
 - (MPRemoteCommandHandlerStatus) play: (MPRemoteCommandEvent *) event {
-  NSLog(@"play");
   [backgroundChannel invokeMethod:@"onPlay" arguments:nil];
   return MPRemoteCommandHandlerStatusSuccess;
 }
 
 - (MPRemoteCommandHandlerStatus) pause: (MPRemoteCommandEvent *) event {
-  NSLog(@"pause");
   [backgroundChannel invokeMethod:@"onPause" arguments:nil];
   return MPRemoteCommandHandlerStatusSuccess;
 }
@@ -320,37 +326,31 @@ static MPMediaItemArtwork* artwork = nil;
 }
 
 - (MPRemoteCommandHandlerStatus) togglePlayPause: (MPRemoteCommandEvent *) event {
-  NSLog(@"togglePlayPause");
   [backgroundChannel invokeMethod:@"onClick" arguments:@[@(0)]];
   return MPRemoteCommandHandlerStatusSuccess;
 }
 
 - (MPRemoteCommandHandlerStatus) stop: (MPRemoteCommandEvent *) event {
-  NSLog(@"stop");
   [backgroundChannel invokeMethod:@"onStop" arguments:nil];
   return MPRemoteCommandHandlerStatusSuccess;
 }
 
 - (MPRemoteCommandHandlerStatus) nextTrack: (MPRemoteCommandEvent *) event {
-  NSLog(@"nextTrack");
   [backgroundChannel invokeMethod:@"onSkipToNext" arguments:nil];
   return MPRemoteCommandHandlerStatusSuccess;
 }
 
 - (MPRemoteCommandHandlerStatus) setVolume: (MPRemoteCommandEvent *) event {
-  NSLog(@"setVolume");
   [backgroundChannel invokeMethod:@"onSetVolume" arguments:nil];
   return MPRemoteCommandHandlerStatusSuccess;
 }
 
 - (MPRemoteCommandHandlerStatus) previousTrack: (MPRemoteCommandEvent *) event {
-  NSLog(@"previousTrack");
   [backgroundChannel invokeMethod:@"onSkipToPrevious" arguments:nil];
   return MPRemoteCommandHandlerStatusSuccess;
 }
 
 - (MPRemoteCommandHandlerStatus) changePlaybackPosition: (MPChangePlaybackPositionCommandEvent *) event {
-  NSLog(@"changePlaybackPosition");
   [backgroundChannel invokeMethod:@"onSeekTo" arguments: @[@(event.positionTime)]];
   return MPRemoteCommandHandlerStatusSuccess;
 }
