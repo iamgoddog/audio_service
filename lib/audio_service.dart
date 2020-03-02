@@ -83,8 +83,7 @@ class PlaybackState {
   int get currentPosition {
     if (basicState == BasicPlaybackState.playing) {
       return (position +
-              ((DateTime.now().millisecondsSinceEpoch - updateTime) *
-                  (speed ?? 1.0)))
+              ((DateTime.now().millisecondsSinceEpoch - updateTime) * (speed ?? 1.0)))
           .toInt();
     } else {
       return position;
@@ -128,8 +127,7 @@ class Rating {
   const Rating._internal(this._type, this._value);
 
   /// Create a new heart rating.
-  const Rating.newHeartRating(bool hasHeart)
-      : this._internal(RatingStyle.heart, hasHeart);
+  const Rating.newHeartRating(bool hasHeart) : this._internal(RatingStyle.heart, hasHeart);
 
   /// Create a new percentage rating.
   factory Rating.newPercentageRating(double percent) {
@@ -144,8 +142,7 @@ class Rating {
         starRatingStyle != RatingStyle.range5stars) {
       throw ArgumentError();
     }
-    if (starRating > starRatingStyle.index || starRating < 0)
-      throw ArgumentError();
+    if (starRating > starRatingStyle.index || starRating < 0) throw ArgumentError();
     return Rating._internal(starRatingStyle, starRating);
   }
 
@@ -154,8 +151,7 @@ class Rating {
       : this._internal(RatingStyle.thumbUpDown, isThumbsUp);
 
   /// Create a new unrated rating.
-  const Rating.newUnratedRating(RatingStyle ratingStyle)
-      : this._internal(ratingStyle, null);
+  const Rating.newUnratedRating(RatingStyle ratingStyle) : this._internal(ratingStyle, null);
 
   /// Return the rating style.
   RatingStyle getRatingStyle() => _type;
@@ -327,8 +323,7 @@ class MediaControl {
   });
 }
 
-const MethodChannel _channel =
-    const MethodChannel('ryanheise.com/audioService');
+const MethodChannel _channel = const MethodChannel('ryanheise.com/audioService');
 
 Map _mediaItem2raw(MediaItem mediaItem) => {
       'id': mediaItem.id,
@@ -448,15 +443,13 @@ class AudioService {
           _playbackStateSubject.add(_playbackState);
           break;
         case 'onMediaChanged':
-          _currentMediaItem = call.arguments[0] != null
-              ? _raw2mediaItem(call.arguments[0])
-              : null;
+          _currentMediaItem =
+              call.arguments[0] != null ? _raw2mediaItem(call.arguments[0]) : null;
           _currentMediaItemSubject.add(_currentMediaItem);
           break;
         case 'onQueueChanged':
-          final List<Map> args = call.arguments[0] != null
-              ? List<Map>.from(call.arguments[0])
-              : null;
+          final List<Map> args =
+              call.arguments[0] != null ? List<Map>.from(call.arguments[0]) : null;
           _queue = args?.map(_raw2mediaItem)?.toList();
           _queueSubject.add(_queue);
           break;
@@ -544,7 +537,8 @@ class AudioService {
       // TODO: remove dependency on flutter_isolate by either using the
       // FlutterNativeView API directly or by waiting until Flutter allows
       // regular isolates to use method channels.
-      AudioService._flutterIsolate = await FlutterIsolate.spawn(_iosIsolateEntrypoint, callbackHandle);
+      AudioService._flutterIsolate =
+          await FlutterIsolate.spawn(_iosIsolateEntrypoint, callbackHandle);
     }
     return await _channel.invokeMethod('start', {
       'callbackHandle': callbackHandle,
@@ -883,8 +877,7 @@ class AudioServiceBackground {
               'action': control.action.index,
             })
         .toList();
-    final rawSystemActions =
-        systemActions.map((action) => action.index).toList();
+    final rawSystemActions = systemActions.map((action) => action.index).toList();
     await _backgroundChannel.invokeMethod('setState', [
       rawControls,
       rawSystemActions,
