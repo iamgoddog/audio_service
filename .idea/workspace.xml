@@ -2,31 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="331f2af5-281d-4209-af9a-d14c5883b584" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ryanheise/audioservice/AudioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ryanheise/audioservice/AudioService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ryanheise/audioservice/AudioServicePlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ryanheise/audioservice/AudioServicePlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/java/com/ryanheise/audioserviceexample/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/java/com/ryanheise/audioserviceexample/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/java/com/ryanheise/audioserviceexample/MainApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/android/src/main/java/com/ryanheise/audioservice/AudioServicePlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/android/src/main/java/com/ryanheise/audioservice/AudioServicePlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/example/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/example/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/example/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/example/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/example/android/app/src/main/java/com/ryanheise/audioserviceexample/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/example/android/app/src/main/java/com/ryanheise/audioserviceexample/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/example/android/app/src/main/java/com/ryanheise/audioserviceexample/MainApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/ios/Classes/AudioServicePlugin.m" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/ios/Classes/AudioServicePlugin.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/AudioServicePlugin.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/AudioServicePlugin.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -41,17 +18,16 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DefaultGradleProjectSettings">
-    <option name="testRunner" value="GRADLE" />
-    <option name="delegatedBuild" value="true" />
+    <option name="isMigrated" value="true" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="FA79V1A00263" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Nexus_6_API_23" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/audio_service.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6195">
-              <caret line="420" column="51" selection-start-line="420" selection-start-column="51" selection-end-line="420" selection-end-column="51" />
+            <state relative-caret-position="5910">
+              <caret line="395" column="41" selection-start-line="395" selection-start-column="41" selection-end-line="395" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -68,8 +44,58 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/android/src/main/java/com/ryanheise/audioservice/AudioServicePlugin.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3495">
-              <caret line="233" column="9" selection-start-line="233" selection-start-column="9" selection-end-line="233" selection-end-column="9" />
+            <state relative-caret-position="417">
+              <caret line="243" column="21" lean-forward="true" selection-start-line="243" selection-start-column="21" selection-end-line="243" selection-end-column="21" />
+              <folding>
+                <element signature="e#19874#19875#0" expanded="true" />
+                <element signature="e#19958#19959#0" expanded="true" />
+                <element signature="e#20059#20060#0" expanded="true" />
+                <element signature="e#20142#20143#0" expanded="true" />
+                <element signature="e#20362#20370#0" expanded="true" />
+                <element signature="e#21380#21381#0" expanded="true" />
+                <element signature="e#21438#21439#0" expanded="true" />
+                <element signature="e#21498#21499#0" expanded="true" />
+                <element signature="e#21554#21555#0" expanded="true" />
+                <element signature="e#21623#21624#0" expanded="true" />
+                <element signature="e#21688#21689#0" expanded="true" />
+                <element signature="e#21900#21901#0" expanded="true" />
+                <element signature="e#21960#21961#0" expanded="true" />
+                <element signature="e#22179#22187#0" expanded="true" />
+                <element signature="e#22669#22670#0" expanded="true" />
+                <element signature="e#22747#22748#0" expanded="true" />
+                <element signature="e#23815#23816#0" expanded="true" />
+                <element signature="e#23862#23863#0" expanded="true" />
+                <element signature="e#23915#23916#0" expanded="true" />
+                <element signature="e#23964#23965#0" expanded="true" />
+                <element signature="e#24042#24043#0" expanded="true" />
+                <element signature="e#24100#24101#0" expanded="true" />
+                <element signature="e#25379#25380#0" expanded="true" />
+                <element signature="e#25425#25426#0" expanded="true" />
+                <element signature="e#26226#26227#0" expanded="true" />
+                <element signature="e#26278#26279#0" expanded="true" />
+                <element signature="e#26338#26339#0" expanded="true" />
+                <element signature="e#26394#26395#0" expanded="true" />
+                <element signature="e#26451#26452#0" expanded="true" />
+                <element signature="e#26504#26505#0" expanded="true" />
+                <element signature="e#26556#26557#0" expanded="true" />
+                <element signature="e#26604#26605#0" expanded="true" />
+                <element signature="e#26664#26665#0" expanded="true" />
+                <element signature="e#26717#26718#0" expanded="true" />
+                <element signature="e#32981#32989#0" expanded="true" />
+                <element signature="e#33229#33240#0" expanded="true" />
+                <element signature="e#33783#33794#0" expanded="true" />
+                <element signature="e#35323#35339#0" expanded="true" />
+                <element signature="e#36578#36594#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -77,8 +103,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pubspec.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" selection-start-line="18" selection-end-line="18" />
+            <state relative-caret-position="240">
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
             </state>
           </provider>
         </entry>
@@ -95,17 +121,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2070">
-              <caret line="146" column="80" selection-start-line="146" selection-start-column="80" selection-end-line="146" selection-end-column="80" />
+            <state relative-caret-position="2580">
+              <caret line="180" column="65" selection-start-line="180" selection-start-column="65" selection-end-line="180" selection-end-column="65" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/android/src/main/java/com/ryanheise/audioservice/AudioService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="757" column="47" selection-start-line="757" selection-start-column="47" selection-end-line="757" selection-end-column="47" />
+            <state relative-caret-position="352">
+              <caret line="152" column="5" selection-start-line="152" selection-start-column="5" selection-end-line="152" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -128,6 +154,7 @@
       <find>ActivityAware</find>
       <find>ServiceListener</find>
       <find>volume</find>
+      <find>&gt;&gt;</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -148,6 +175,7 @@
         <option value="$PROJECT_DIR$/android/src/main/java/com/ryanheise/audioservice/AudioServicePlugin.java" />
         <option value="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service/android/src/main/java/com/ryanheise/audioservice/AudioServicePlugin.java" />
         <option value="$PROJECT_DIR$/android/src/main/java/com/ryanheise/audioservice/AudioService.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -159,85 +187,16 @@
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator currentView="PackagesPane" proportions="" version="1">
+    <navigator currentView="ProjectPane" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="audio_service" type="b2602c69:ProjectViewProjectNode" />
-              <item name="audio_service" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="audio_service" type="b2602c69:ProjectViewProjectNode" />
-              <item name="audio_service" type="462c0819:PsiDirectoryNode" />
-              <item name="android" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="audio_service" type="b2602c69:ProjectViewProjectNode" />
-              <item name="audio_service" type="462c0819:PsiDirectoryNode" />
-              <item name="android" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="audio_service" type="b2602c69:ProjectViewProjectNode" />
-              <item name="audio_service" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="audio_service" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-            <path>
-              <item name="audio_service" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="audio_service" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="audio_service" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="audio_service" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="audio_service" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <expand>
             <path>
               <item name="audio_service" type="58d84e3e:PackageViewProjectNode" />
               <item name="audio_service" type="616d4139:PackageViewModuleNode" />
-            </path>
-            <path>
-              <item name="audio_service" type="58d84e3e:PackageViewProjectNode" />
-              <item name="audio_service" type="616d4139:PackageViewModuleNode" />
-              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
-            </path>
-            <path>
-              <item name="audio_service" type="58d84e3e:PackageViewProjectNode" />
-              <item name="audio_service" type="616d4139:PackageViewModuleNode" />
-              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
-              <item name="example" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="audio_service" type="58d84e3e:PackageViewProjectNode" />
-              <item name="audio_service" type="616d4139:PackageViewModuleNode" />
-              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
-              <item name="example" type="1f31426a:PackageElementNode" />
-              <item name="lib" type="1f31426a:PackageElementNode" />
             </path>
             <path>
               <item name="audio_service" type="58d84e3e:PackageViewProjectNode" />
@@ -264,6 +223,34 @@
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="audio_service" type="b2602c69:ProjectViewProjectNode" />
+              <item name="audio_service" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="audio_service" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="audio_service" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
+            </path>
+            <path>
+              <item name="audio_service" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
+              <item name="audio_service" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -277,7 +264,7 @@
     <property name="project.structure.last.edited" value="Variables" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="dart.settings" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RunDashboard">
@@ -306,7 +293,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="720" y="23" width="960" height="1027" extended-state="0" />
+    <frame x="0" y="23" width="1680" height="1027" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1947497" />
@@ -323,9 +310,9 @@
       <window_info anchor="bottom" id="TODO" order="2" />
       <window_info anchor="bottom" id="Android Profiler" order="3" show_stripe_button="false" />
       <window_info anchor="bottom" id="Debug" order="4" weight="0.32941177" />
-      <window_info anchor="bottom" id="Terminal" order="5" visible="true" weight="0.21069519" />
+      <window_info anchor="bottom" id="Terminal" order="5" weight="0.21069519" />
       <window_info anchor="bottom" id="Event Log" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.17967914" />
+      <window_info anchor="bottom" id="Version Control" order="7" visible="true" weight="0.26524064" />
       <window_info anchor="bottom" id="Multi-OS Engine" order="8" />
       <window_info anchor="bottom" id="Find" order="9" />
       <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
@@ -336,6 +323,11 @@
       <window_info anchor="right" id="Palette&#9;" order="5" />
       <window_info anchor="right" id="Flutter Performance" order="6" />
     </layout>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/example/ios/.symlinks/plugins/audio_service" />
+    </ignored-roots>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../../github/audio_service/android/build.gradle">
@@ -381,15 +373,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/android/src/main/java/com/ryanheise/audioservice/AudioService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="757" column="47" selection-start-line="757" selection-start-column="47" selection-end-line="757" selection-end-column="47" />
+        <state relative-caret-position="352">
+          <caret line="152" column="5" selection-start-line="152" selection-start-column="5" selection-end-line="152" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/audio_service.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6195">
-          <caret line="420" column="51" selection-start-line="420" selection-start-column="51" selection-end-line="420" selection-end-column="51" />
+        <state relative-caret-position="5910">
+          <caret line="395" column="41" selection-start-line="395" selection-start-column="41" selection-end-line="395" selection-end-column="41" />
         </state>
       </provider>
     </entry>
@@ -402,15 +394,56 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/android/src/main/java/com/ryanheise/audioservice/AudioServicePlugin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3495">
-          <caret line="233" column="9" selection-start-line="233" selection-start-column="9" selection-end-line="233" selection-end-column="9" />
+        <state relative-caret-position="417">
+          <caret line="243" column="21" lean-forward="true" selection-start-line="243" selection-start-column="21" selection-end-line="243" selection-end-column="21" />
+          <folding>
+            <element signature="e#19874#19875#0" expanded="true" />
+            <element signature="e#19958#19959#0" expanded="true" />
+            <element signature="e#20059#20060#0" expanded="true" />
+            <element signature="e#20142#20143#0" expanded="true" />
+            <element signature="e#20362#20370#0" expanded="true" />
+            <element signature="e#21380#21381#0" expanded="true" />
+            <element signature="e#21438#21439#0" expanded="true" />
+            <element signature="e#21498#21499#0" expanded="true" />
+            <element signature="e#21554#21555#0" expanded="true" />
+            <element signature="e#21623#21624#0" expanded="true" />
+            <element signature="e#21688#21689#0" expanded="true" />
+            <element signature="e#21900#21901#0" expanded="true" />
+            <element signature="e#21960#21961#0" expanded="true" />
+            <element signature="e#22179#22187#0" expanded="true" />
+            <element signature="e#22669#22670#0" expanded="true" />
+            <element signature="e#22747#22748#0" expanded="true" />
+            <element signature="e#23815#23816#0" expanded="true" />
+            <element signature="e#23862#23863#0" expanded="true" />
+            <element signature="e#23915#23916#0" expanded="true" />
+            <element signature="e#23964#23965#0" expanded="true" />
+            <element signature="e#24042#24043#0" expanded="true" />
+            <element signature="e#24100#24101#0" expanded="true" />
+            <element signature="e#25379#25380#0" expanded="true" />
+            <element signature="e#25425#25426#0" expanded="true" />
+            <element signature="e#26226#26227#0" expanded="true" />
+            <element signature="e#26278#26279#0" expanded="true" />
+            <element signature="e#26338#26339#0" expanded="true" />
+            <element signature="e#26394#26395#0" expanded="true" />
+            <element signature="e#26451#26452#0" expanded="true" />
+            <element signature="e#26504#26505#0" expanded="true" />
+            <element signature="e#26556#26557#0" expanded="true" />
+            <element signature="e#26604#26605#0" expanded="true" />
+            <element signature="e#26664#26665#0" expanded="true" />
+            <element signature="e#26717#26718#0" expanded="true" />
+            <element signature="e#32981#32989#0" expanded="true" />
+            <element signature="e#33229#33240#0" expanded="true" />
+            <element signature="e#33783#33794#0" expanded="true" />
+            <element signature="e#35323#35339#0" expanded="true" />
+            <element signature="e#36578#36594#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pubspec.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        <state relative-caret-position="240">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
         </state>
       </provider>
     </entry>
@@ -424,8 +457,15 @@
     <entry file="file://$PROJECT_DIR$/example/android/app/src/main/java/com/ryanheise/audioserviceexample/MainApplication.java" />
     <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2070">
-          <caret line="146" column="80" selection-start-line="146" selection-start-column="80" selection-end-line="146" selection-end-column="80" />
+        <state relative-caret-position="2580">
+          <caret line="180" column="65" selection-start-line="180" selection-start-column="65" selection-end-line="180" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
         </state>
       </provider>
     </entry>
