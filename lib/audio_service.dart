@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'dart:io' show Platform;
+import 'dart:io' show File, Platform;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -245,6 +246,15 @@ class MediaItem {
   /// The rating of the MediaItem.
   final Rating rating;
 
+  /// A map of additional metadata for the media item.
+  ///
+  /// The values must be integers or strings.
+  final Map<String, dynamic> extras;
+
+  /// Creates a [MediaItem].
+  ///
+  /// [id], [album] and [title] must not be null, and [id] must be unique for
+  /// each instance.
   const MediaItem({
     @required this.id,
     @required this.album,
@@ -258,6 +268,7 @@ class MediaItem {
     this.displaySubtitle,
     this.displayDescription,
     this.rating,
+    this.extras,
   });
 
   MediaItem copyWith({
@@ -273,6 +284,7 @@ class MediaItem {
     String displaySubtitle,
     String displayDescription,
     Rating rating,
+    Map extras,
   }) =>
       MediaItem(
         id: id ?? this.id,
@@ -287,6 +299,7 @@ class MediaItem {
         displaySubtitle: displaySubtitle ?? this.displaySubtitle,
         displayDescription: displayDescription ?? this.displayDescription,
         rating: rating ?? this.rating,
+        extras: extras ?? this.extras,
       );
 
   @override
@@ -338,6 +351,7 @@ Map _mediaItem2raw(MediaItem mediaItem) => {
       'displaySubtitle': mediaItem.displaySubtitle,
       'displayDescription': mediaItem.displayDescription,
       'rating': mediaItem.rating?._toRaw(),
+      'extras': mediaItem.extras,
     };
 
 MediaItem _raw2mediaItem(Map raw) => MediaItem(
@@ -352,7 +366,17 @@ MediaItem _raw2mediaItem(Map raw) => MediaItem(
       displaySubtitle: raw['displaySubtitle'],
       displayDescription: raw['displayDescription'],
       rating: raw['rating'] != null ? Rating._fromRaw(raw['rating']) : null,
+      extras: _raw2extras(raw['extras']),
     );
+
+Map<String, dynamic> _raw2extras(Map raw) {
+  if (raw == null) return null;
+  final extras = <String, dynamic>{};
+  for (var key in raw.keys) {
+    extras[key as String] = raw[key];
+  }
+  return extras;
+}
 
 const String _CUSTOM_PREFIX = 'custom_';
 
@@ -366,6 +390,7 @@ const String _CUSTOM_PREFIX = 'custom_';
 /// Your UI must disconnect from the audio service when it is no longer visible
 /// although the audio service will continue to run in the background. If your
 /// UI once again becomes visible, you should reconnect to the audio service.
+/// Use [AudioServiceWidget] to manage this connection automatically.
 class AudioService {
   /// The root media ID for browsing media provided by the background
   /// task.
@@ -412,12 +437,17 @@ class AudioService {
   static List<MediaItem> get queue => _queue;
   static List<MediaItem> _queue;
 
+  /// True after service stopped and !running.
+  static bool _afterStop = false;
+
   /// Connects to the service from your UI so that audio playback can be
   /// controlled.
   ///
   /// This method should be called when your UI becomes visible, and
   /// [disconnect] should be called when your UI is no longer visible. All
   /// other methods in this class will work only while connected.
+  ///
+  /// Use [AudioServiceWidget] to handle this automatically.
   static Future<void> connect() async {
     _channel.setMethodCallHandler((MethodCall call) async {
       switch (call.method) {
@@ -427,6 +457,8 @@ class AudioService {
           _browseMediaChildrenSubject.add(_browseMediaChildren);
           break;
         case 'onPlaybackStateChanged':
+          // If this event arrives too late, ignore it.
+          if (_afterStop) return;
           final List args = call.arguments;
           int actionBits = args[1];
           _playbackState = PlaybackState(
@@ -462,16 +494,21 @@ class AudioService {
           _currentMediaItemSubject.add(null);
           _queue = null;
           _queueSubject.add(null);
+          _running = false;
+          _afterStop = true;
           break;
       }
     });
     await _channel.invokeMethod("connect");
+    _running = await _channel.invokeMethod("isRunning");
     _connected = true;
   }
 
   /// Disconnects your UI from the service.
   ///
   /// This method should be called when the UI is no longer visible.
+  ///
+  /// Use [AudioServiceWidget] to handle this automatically.
   static Future<void> disconnect() async {
     _channel.setMethodCallHandler(null);
     await _channel.invokeMethod("disconnect");
@@ -483,9 +520,8 @@ class AudioService {
   static bool _connected = false;
 
   /// True if the background audio task is running.
-  static Future<bool> get running async {
-    return await _channel.invokeMethod("isRunning");
-  }
+  static bool _running = false;
+  static bool get running => _running;
 
   /// Starts a background audio task which will continue running even when the
   /// UI is not visible or the screen is turned off.
@@ -515,11 +551,15 @@ class AudioService {
     bool androidNotificationClickStartsActivity = true,
     bool androidNotificationOngoing = false,
     bool resumeOnClick = true,
-    bool shouldPreloadArtwork = false,
     bool androidStopForegroundOnPause = false,
     bool enableQueue = false,
     bool androidStopOnRemoveTask = false,
+    int fastForwardInterval = 0,
+    int rewindInterval = 0,
   }) async {
+    if (_running) return false;
+    _running = true;
+    _afterStop = false;
     final ui.CallbackHandle handle =
         ui.PluginUtilities.getCallbackHandle(backgroundTaskEntrypoint);
     if (handle == null) {
@@ -540,7 +580,7 @@ class AudioService {
       AudioService._flutterIsolate =
           await FlutterIsolate.spawn(_iosIsolateEntrypoint, callbackHandle);
     }
-    return await _channel.invokeMethod('start', {
+    final success = await _channel.invokeMethod('start', {
       'callbackHandle': callbackHandle,
       'androidNotificationChannelName': androidNotificationChannelName,
       'androidNotificationChannelDescription': androidNotificationChannelDescription,
@@ -549,11 +589,14 @@ class AudioService {
       'androidNotificationClickStartsActivity': androidNotificationClickStartsActivity,
       'androidNotificationOngoing': androidNotificationOngoing,
       'resumeOnClick': resumeOnClick,
-      'shouldPreloadArtwork': shouldPreloadArtwork,
       'androidStopForegroundOnPause': androidStopForegroundOnPause,
       'enableQueue': enableQueue,
       'androidStopOnRemoveTask': androidStopOnRemoveTask,
+      'fastForwardInterval': fastForwardInterval,
+      'rewindInterval': rewindInterval,
     });
+    _running = await _channel.invokeMethod("isRunning");
+    return success;
   }
 
   /// Sets the parent of the children that [browseMediaChildrenStream] broadcasts.
@@ -691,6 +734,8 @@ class AudioServiceBackground {
       PlaybackState(basicState: BasicPlaybackState.none, actions: Set());
   static MethodChannel _backgroundChannel;
   static PlaybackState _state = _noneState;
+  static MediaItem _mediaItem;
+  static BaseCacheManager _cacheManager;
 
   /// The current media playback state.
   ///
@@ -708,27 +753,14 @@ class AudioServiceBackground {
     _backgroundChannel = const MethodChannel('ryanheise.com/audioServiceBackground');
     WidgetsFlutterBinding.ensureInitialized();
     final task = taskBuilder();
+    _cacheManager = task.cacheManager;
     _backgroundChannel.setMethodCallHandler((MethodCall call) async {
       switch (call.method) {
         case 'onLoadChildren':
           final List args = call.arguments;
           String parentMediaId = args[0];
           List<MediaItem> mediaItems = await task.onLoadChildren(parentMediaId);
-          List<Map> rawMediaItems = mediaItems
-              .map((mediaItem) => {
-                    'id': mediaItem.id,
-                    'album': mediaItem.album,
-                    'title': mediaItem.title,
-                    'artist': mediaItem.artist,
-                    'genre': mediaItem.genre,
-                    'duration': mediaItem.duration,
-                    'artUri': mediaItem.artUri,
-                    'playable': mediaItem.playable,
-                    'displayTitle': mediaItem.displayTitle,
-                    'displaySubtitle': mediaItem.displaySubtitle,
-                    'displayDescription': mediaItem.displayDescription,
-                  })
-              .toList();
+          List<Map> rawMediaItems = mediaItems.map(_mediaItem2raw).toList();
           return rawMediaItems as dynamic;
         case 'onAudioFocusGained':
           task.onAudioFocusGained();
@@ -891,13 +923,66 @@ class AudioServiceBackground {
   }
 
   /// Sets the current queue and notifies all clients.
-  static Future<void> setQueue(List<MediaItem> queue) async {
-    await _backgroundChannel.invokeMethod('setQueue', queue.map(_mediaItem2raw).toList());
+  static Future<void> setQueue(List<MediaItem> queue,
+      {bool preloadArtwork = false}) async {
+    if (preloadArtwork) {
+      _loadAllArtwork(queue);
+    }
+    await _backgroundChannel.invokeMethod(
+        'setQueue', queue.map(_mediaItem2raw).toList());
   }
 
   /// Sets the currently playing media item and notifies all clients.
   static Future<void> setMediaItem(MediaItem mediaItem) async {
-    await _backgroundChannel.invokeMethod('setMediaItem', _mediaItem2raw(mediaItem));
+    _mediaItem = mediaItem;
+    if (mediaItem.artUri != null) {
+      // We potentially need to fetch the art.
+      final fileInfo = await _cacheManager.getFileFromMemory(mediaItem.artUri);
+      String filePath = fileInfo?.file?.path;
+      if (filePath == null) {
+        // We haven't fetched the art yet, so show the metadata now, and again
+        // after we load the art.
+        await _backgroundChannel.invokeMethod(
+            'setMediaItem', _mediaItem2raw(mediaItem));
+        // Load the art
+        filePath = await _loadArtwork(mediaItem);
+        // If we failed to download the art, abort.
+        if (filePath == null) return;
+        // If we've already set a new media item, cancel this request.
+        if (mediaItem != _mediaItem) return;
+      }
+      final extras = Map.of(mediaItem.extras ?? <String, dynamic>{});
+      extras['artCacheFile'] = filePath;
+      final platformMediaItem = mediaItem.copyWith(extras: extras);
+      // Show the media item after the art is loaded.
+      await _backgroundChannel.invokeMethod(
+          'setMediaItem', _mediaItem2raw(platformMediaItem));
+    } else {
+      await _backgroundChannel.invokeMethod(
+          'setMediaItem', _mediaItem2raw(mediaItem));
+    }
+  }
+
+  static Future<void> _loadAllArtwork(List<MediaItem> queue) async {
+    for (var mediaItem in queue) {
+      await _loadArtwork(mediaItem);
+    }
+  }
+
+  static Future<String> _loadArtwork(MediaItem mediaItem) async {
+    try {
+      final artUri = mediaItem.artUri;
+      if (artUri != null) {
+        const prefix = 'file://';
+        if (artUri.toLowerCase().startsWith(prefix)) {
+          return artUri.substring(prefix.length);
+        } else {
+          final file = await _cacheManager.getSingleFile(mediaItem.artUri);
+          return file.path;
+        }
+      }
+    } catch (e) {}
+    return null;
   }
 
   /// Notify clients that the child media items of [parentMediaId] have
@@ -930,6 +1015,13 @@ class AudioServiceBackground {
 /// You should subclass [BackgroundAudioTask] and override the callbacks for
 /// each type of event that your background task wishes to react to.
 abstract class BackgroundAudioTask {
+  final BaseCacheManager cacheManager;
+
+  /// Subclasses may supply a [cacheManager] to manage the loading of artwork,
+  /// or an instance of [DefaultCacheManager] will be used by default.
+  BackgroundAudioTask({BaseCacheManager cacheManager})
+      : this.cacheManager = cacheManager ?? DefaultCacheManager();
+
   /// Called once when this audio task is first started and ready to play
   /// audio, in response to [AudioService.start]. When the returned future
   /// completes, this task will be immediately terminated.
@@ -1042,4 +1134,59 @@ _iosIsolateEntrypoint(int rawHandle) async {
   ui.CallbackHandle handle = ui.CallbackHandle.fromRawHandle(rawHandle);
   Function backgroundTask = ui.PluginUtilities.getCallbackFromHandle(handle);
   backgroundTask();
+}
+
+/// A widget that maintains a connection to [AudioService].
+///
+/// Insert this widget at the top of your widget tree to maintain the
+/// connection across all routes.
+class AudioServiceWidget extends StatefulWidget {
+  final Widget child;
+
+  AudioServiceWidget({@required this.child});
+
+  @override
+  _AudioServiceWidgetState createState() => _AudioServiceWidgetState();
+}
+
+class _AudioServiceWidgetState extends State<AudioServiceWidget>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    AudioService.connect();
+  }
+
+  @override
+  void dispose() {
+    AudioService.disconnect();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        AudioService.connect();
+        break;
+      case AppLifecycleState.paused:
+        AudioService.disconnect();
+        break;
+      default:
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        AudioService.disconnect();
+        return true;
+      },
+      child: widget.child,
+    );
+  }
 }

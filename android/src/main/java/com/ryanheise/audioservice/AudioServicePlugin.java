@@ -251,14 +251,13 @@ public class AudioServicePlugin implements FlutterPlugin, ActivityAware {
                     String androidNotificationChannelDescription = (String) arguments.get("androidNotificationChannelDescription");
                     Integer notificationColor = arguments.get("notificationColor") == null ? null : getInt(arguments.get("notificationColor"));
                     String androidNotificationIcon = (String) arguments.get("androidNotificationIcon");
-                    boolean shouldPreloadArtwork = (Boolean) arguments.get("shouldPreloadArtwork");
                     final boolean enableQueue = (Boolean) arguments.get("enableQueue");
                     final boolean androidStopForegroundOnPause = (Boolean) arguments.get("androidStopForegroundOnPause");
 				    final boolean androidStopOnRemoveTask = (Boolean)arguments.get("androidStopOnRemoveTask");
 
 				    final String appBundlePath = FlutterMain.findAppBundlePath(context.getApplicationContext());
                     backgroundHandler = new BackgroundHandler(callbackHandle, appBundlePath, enableQueue);
-				    AudioService.init(activity, resumeOnClick, androidNotificationChannelName, androidNotificationChannelDescription, notificationColor, androidNotificationIcon, androidNotificationClickStartsActivity, androidNotificationOngoing, shouldPreloadArtwork, androidStopForegroundOnPause, androidStopOnRemoveTask, backgroundHandler);
+				AudioService.init(activity, resumeOnClick, androidNotificationChannelName, androidNotificationChannelDescription, notificationColor, androidNotificationIcon, androidNotificationClickStartsActivity, androidNotificationOngoing, androidStopForegroundOnPause, androidStopOnRemoveTask, backgroundHandler);
 
                     synchronized (connectionCallback) {
                         if (mediaController != null)
@@ -582,7 +581,10 @@ public class AudioServicePlugin implements FlutterPlugin, ActivityAware {
         public void onStop() {
             invokeMethod("onStop");
         }
-
+		@Override
+		public void onDestroy() {
+			clear();
+		}
         @Override
         public void onAddQueueItem(MediaMetadataCompat metadata) {
             invokeMethod("onAddQueueItem", mediaMetadata2raw(metadata));
@@ -703,13 +705,7 @@ public class AudioServicePlugin implements FlutterPlugin, ActivityAware {
                     result.success(true);
                     break;
                 case "stopped":
-                    AudioService.instance.stop();
-                    if (silenceAudioTrack != null)
-                        silenceAudioTrack.release();
-                    if (clientHandler != null) clientHandler.invokeMethod("onStopped");
-                    backgroundFlutterEngine.destroy();
-                    backgroundFlutterEngine = null;
-                    backgroundHandler = null;
+				clear();
                     result.success(true);
                     break;
                 case "notifyChildrenChanged":
@@ -744,6 +740,16 @@ public class AudioServicePlugin implements FlutterPlugin, ActivityAware {
             ArrayList<Object> list = new ArrayList<Object>(Arrays.asList(args));
             channel.invokeMethod(method, list);
         }
+
+		private void clear() {
+			AudioService.instance.stop();
+			if (silenceAudioTrack != null)
+				silenceAudioTrack.release();
+			if (clientHandler != null) clientHandler.invokeMethod("onStopped");
+			backgroundFlutterEngine.destroy();
+			backgroundFlutterEngine = null;
+			backgroundHandler = null;
+		}
     }
 
     private static List<Map<?, ?>> mediaItems2raw(List<MediaBrowserCompat.MediaItem> mediaItems) {
@@ -843,6 +849,19 @@ public class AudioServicePlugin implements FlutterPlugin, ActivityAware {
         if (mediaMetadata.containsKey(MediaMetadataCompat.METADATA_KEY_RATING)) {
             raw.put("rating", rating2raw(mediaMetadata.getRating(MediaMetadataCompat.METADATA_KEY_RATING)));
         }
+		Map<String, Object> extras = new HashMap<>();
+		for (String key : mediaMetadata.keySet()) {
+			if (key.startsWith("extra_long_")) {
+				String rawKey = key.substring("extra_long_".length());
+				extras.put(rawKey, mediaMetadata.getLong(key));
+			} else if (key.startsWith("extra_string_")) {
+				String rawKey = key.substring("extra_string_".length());
+				extras.put(rawKey, mediaMetadata.getString(key));
+			}
+		}
+		if (extras.size() > 0) {
+			raw.put("extras", extras);
+		}
         return raw;
     }
 
@@ -858,7 +877,8 @@ public class AudioServicePlugin implements FlutterPlugin, ActivityAware {
                 (String) rawMediaItem.get("displayTitle"),
                 (String) rawMediaItem.get("displaySubtitle"),
                 (String) rawMediaItem.get("displayDescription"),
-                raw2rating((Map<String, Object>) rawMediaItem.get("rating"))
+				raw2rating((Map<String, Object>)rawMediaItem.get("rating")),
+				(Map<?, ?>)rawMediaItem.get("extras")
         );
     }
 
